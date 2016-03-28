@@ -1,0 +1,920 @@
+fileFormatVersion: 2
+guid: ba86a3211717220498e0b0d0abb1dabf
+timeCreated: 1456431671
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: arm_l
+    100002: arm_r
+    100004: Armature
+    100006: //RootNode
+    100008: finger_1_a_l
+    100010: finger_1_a_r
+    100012: finger_1_b_l
+    100014: finger_1_b_r
+    100016: finger_2_a_l
+    100018: finger_2_a_r
+    100020: finger_2_b_l
+    100022: finger_2_b_r
+    100024: finger_3_a_l
+    100026: finger_3_a_r
+    100028: finger_3_b_l
+    100030: finger_3_b_r
+    100032: foot_l
+    100034: foot_r
+    100036: forearm_l
+    100038: forearm_r
+    100040: hand_l
+    100042: hand_r
+    100044: head
+    100046: heap_l
+    100048: heap_r
+    100050: heaps
+    100052: heel_l
+    100054: heel_r
+    100056: ik_hand_l
+    100058: ik_hand_r
+    100060: ik_leg_l
+    100062: ik_leg_r
+    100064: leg_l
+    100066: leg_r
+    100068: master
+    100070: neck
+    100072: Racoon
+    100074: shoulder_l
+    100076: shoulder_r
+    100078: spine_low
+    100080: spine_up
+    100082: tail_1
+    100084: tail_2
+    100086: tail_3
+    100088: thumb_1_l
+    100090: thumb_1_r
+    100092: thumb_2_l
+    100094: thumb_2_r
+    400000: arm_l
+    400002: arm_r
+    400004: Armature
+    400006: //RootNode
+    400008: finger_1_a_l
+    400010: finger_1_a_r
+    400012: finger_1_b_l
+    400014: finger_1_b_r
+    400016: finger_2_a_l
+    400018: finger_2_a_r
+    400020: finger_2_b_l
+    400022: finger_2_b_r
+    400024: finger_3_a_l
+    400026: finger_3_a_r
+    400028: finger_3_b_l
+    400030: finger_3_b_r
+    400032: foot_l
+    400034: foot_r
+    400036: forearm_l
+    400038: forearm_r
+    400040: hand_l
+    400042: hand_r
+    400044: head
+    400046: heap_l
+    400048: heap_r
+    400050: heaps
+    400052: heel_l
+    400054: heel_r
+    400056: ik_hand_l
+    400058: ik_hand_r
+    400060: ik_leg_l
+    400062: ik_leg_r
+    400064: leg_l
+    400066: leg_r
+    400068: master
+    400070: neck
+    400072: Racoon
+    400074: shoulder_l
+    400076: shoulder_r
+    400078: spine_low
+    400080: spine_up
+    400082: tail_1
+    400084: tail_2
+    400086: tail_3
+    400088: thumb_1_l
+    400090: thumb_1_r
+    400092: thumb_2_l
+    400094: thumb_2_r
+    4300000: Racoon
+    7400000: Default Take
+    7400002: Falling
+    7400004: Flying
+    7400006: Idle
+    7400008: Jumping
+    7400010: Running
+    9500000: //RootNode
+    13700000: Racoon
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Default Take
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 15
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/ik_leg_r
+        weight: 1
+      - path: Armature/ik_leg_r/foot_r
+        weight: 1
+      - path: Armature/master
+        weight: 1
+      - path: Armature/master/heaps
+        weight: 1
+      - path: Armature/master/heaps/heap_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l/heel_l
+        weight: 1
+      - path: Armature/master/heaps/heap_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r/heel_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l/finger_1_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l/finger_2_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l/finger_3_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l/thumb_2_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r/finger_1_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r/finger_2_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r/finger_3_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r/thumb_2_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/head
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l/forearm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r/forearm_r
+        weight: 1
+      - path: Armature/master/heaps/tail_1
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2/tail_3
+        weight: 1
+      - path: Armature/master/ik_leg_l
+        weight: 1
+      - path: Armature/master/ik_leg_l/foot_l
+        weight: 1
+      - path: Racoon
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Falling
+      takeName: Falling
+      firstFrame: 0
+      lastFrame: 16
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/ik_leg_r
+        weight: 1
+      - path: Armature/ik_leg_r/foot_r
+        weight: 1
+      - path: Armature/master
+        weight: 1
+      - path: Armature/master/heaps
+        weight: 1
+      - path: Armature/master/heaps/heap_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l/heel_l
+        weight: 1
+      - path: Armature/master/heaps/heap_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r/heel_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l/finger_1_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l/finger_2_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l/finger_3_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l/thumb_2_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r/finger_1_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r/finger_2_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r/finger_3_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r/thumb_2_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/head
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l/forearm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r/forearm_r
+        weight: 1
+      - path: Armature/master/heaps/tail_1
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2/tail_3
+        weight: 1
+      - path: Armature/master/ik_leg_l
+        weight: 1
+      - path: Armature/master/ik_leg_l/foot_l
+        weight: 1
+      - path: Racoon
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Flying
+      takeName: Flying
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/ik_leg_r
+        weight: 1
+      - path: Armature/ik_leg_r/foot_r
+        weight: 1
+      - path: Armature/master
+        weight: 1
+      - path: Armature/master/heaps
+        weight: 1
+      - path: Armature/master/heaps/heap_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l/heel_l
+        weight: 1
+      - path: Armature/master/heaps/heap_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r/heel_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l/finger_1_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l/finger_2_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l/finger_3_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l/thumb_2_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r/finger_1_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r/finger_2_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r/finger_3_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r/thumb_2_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/head
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l/forearm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r/forearm_r
+        weight: 1
+      - path: Armature/master/heaps/tail_1
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2/tail_3
+        weight: 1
+      - path: Armature/master/ik_leg_l
+        weight: 1
+      - path: Armature/master/ik_leg_l/foot_l
+        weight: 1
+      - path: Racoon
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/ik_leg_r
+        weight: 1
+      - path: Armature/ik_leg_r/foot_r
+        weight: 1
+      - path: Armature/master
+        weight: 1
+      - path: Armature/master/heaps
+        weight: 1
+      - path: Armature/master/heaps/heap_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l/heel_l
+        weight: 1
+      - path: Armature/master/heaps/heap_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r/heel_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l/finger_1_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l/finger_2_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l/finger_3_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l/thumb_2_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r/finger_1_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r/finger_2_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r/finger_3_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r/thumb_2_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/head
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l/forearm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r/forearm_r
+        weight: 1
+      - path: Armature/master/heaps/tail_1
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2/tail_3
+        weight: 1
+      - path: Armature/master/ik_leg_l
+        weight: 1
+      - path: Armature/master/ik_leg_l/foot_l
+        weight: 1
+      - path: Racoon
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Jumping
+      takeName: Jumping
+      firstFrame: 0
+      lastFrame: 17
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/ik_leg_r
+        weight: 1
+      - path: Armature/ik_leg_r/foot_r
+        weight: 1
+      - path: Armature/master
+        weight: 1
+      - path: Armature/master/heaps
+        weight: 1
+      - path: Armature/master/heaps/heap_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l/heel_l
+        weight: 1
+      - path: Armature/master/heaps/heap_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r/heel_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l/finger_1_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l/finger_2_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l/finger_3_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l/thumb_2_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r/finger_1_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r/finger_2_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r/finger_3_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r/thumb_2_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/head
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l/forearm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r/forearm_r
+        weight: 1
+      - path: Armature/master/heaps/tail_1
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2/tail_3
+        weight: 1
+      - path: Armature/master/ik_leg_l
+        weight: 1
+      - path: Armature/master/ik_leg_l/foot_l
+        weight: 1
+      - path: Racoon
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Running
+      takeName: Running
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/ik_leg_r
+        weight: 1
+      - path: Armature/ik_leg_r/foot_r
+        weight: 1
+      - path: Armature/master
+        weight: 1
+      - path: Armature/master/heaps
+        weight: 1
+      - path: Armature/master/heaps/heap_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l
+        weight: 1
+      - path: Armature/master/heaps/heap_l/leg_l/heel_l
+        weight: 1
+      - path: Armature/master/heaps/heap_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r
+        weight: 1
+      - path: Armature/master/heaps/heap_r/leg_r/heel_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_1_a_l/finger_1_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_2_a_l/finger_2_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/finger_3_a_l/finger_3_b_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_l/hand_l/thumb_1_l/thumb_2_l
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_1_a_r/finger_1_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_2_a_r/finger_2_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/finger_3_a_r/finger_3_b_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r
+        weight: 1
+      - path: Armature/master/heaps/ik_hand_r/hand_r/thumb_1_r/thumb_2_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/head
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_l/arm_l/forearm_l
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r
+        weight: 1
+      - path: Armature/master/heaps/spine_low/spine_up/neck/shoulder_r/arm_r/forearm_r
+        weight: 1
+      - path: Armature/master/heaps/tail_1
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2
+        weight: 1
+      - path: Armature/master/heaps/tail_1/tail_2/tail_3
+        weight: 1
+      - path: Armature/master/ik_leg_l
+        weight: 1
+      - path: Armature/master/ik_leg_l/foot_l
+        weight: 1
+      - path: Racoon
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
