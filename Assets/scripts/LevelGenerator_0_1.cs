@@ -48,6 +48,8 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	private LevelShape levelShape;
 
+	private Transform levelDebugMarker1;
+
 	void Start () {
 
 		RadialPlayerControl pc = player.GetComponent<RadialPlayerControl> ();
@@ -88,6 +90,9 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 		levelShape = new LevelShape (levelPrefabs[0]);
 
+		levelDebugMarker1 = Instantiate (debugMarker);
+		levelDebugMarker1.GetComponent<Renderer> ().material = debugMat1;
+
 //		for (int i = 0; i < 360; i++) {			
 //			Vector2 pos = levelShape.getPosition ( i );
 //			Transform marker = Instantiate (normalMarker);
@@ -95,8 +100,8 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 //			marker.localEulerAngles = new Vector3 (0.0f, -Mathf.Rad2Deg*pos.y, 0.0f);
 //		}
 
-		generateNextPart ();
-		generatePlatforms (2000);
+		//generateNextPart ();
+		//generatePlatforms (2000);
 	}
 
 	void Awake() {
@@ -105,7 +110,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.G)) {
-			generatePlatforms (1);
+			addOneBlock ();
 		}
 	}
 
@@ -209,6 +214,15 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 		nextBlockAngle += angleSize;
 		nextBlockAngle = RadialMath.normalize (nextBlockAngle);
+
+
+		Vector2 p = levelShape.getPosition(nextBlockAngle);
+		Vector3 lastPoint = RadialMath.radialToEuqlid (new Vector3 (p.x, nextBlockAngle, height));
+		levelDebugMarker1.position = lastPoint;
+
+		Vector2 nextPoint = levelShape.getNextPoint (nextBlockAngle);
+		float distToNext = Mathf.Sqrt ((nextPoint.x - lastPoint.x) * (nextPoint.x - lastPoint.x) + (nextPoint.y - lastPoint.z) * (nextPoint.y - lastPoint.z));
+		Debug.Log ("DIST TO NEXT " + distToNext);
 	}
 
 	private void createBlockInstance(Transform prefab, Vector3 radialPos, float rotation) {
@@ -402,6 +416,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 	private class LevelShape {
 
 		Vector2[] levelPoints; // radius and rotation for each of 360 degrees
+		Vector2[] nextPoint;
 
 		public LevelShape() {			
 		}
@@ -426,8 +441,9 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 			foreach (Vector3 pos in radialPositions)
 				positions.Add( RadialMath.radialToEuqlid(pos));
-
+			
 			levelPoints = new Vector2[360];
+			nextPoint = new Vector2[360];
 
 			int index = radialPositions.Count-1;
 			int index2 = 0;
@@ -461,6 +477,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 				Vector3 radPos = RadialMath.euqlidToRadial( new Vector3( x, 0.0f, y ));
 				levelPoints[i] = new Vector2(radPos.x, rotation);
+				nextPoint[i] = new Vector2(p2.x, p2.z);
 			}
 		}
 
@@ -468,8 +485,14 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			return levelPoints [index];
 		}
 
+		public Vector2 getNextPoint(float angle) {
+			return nextPoint[ Mathf.FloorToInt (RadialMath.normalize (angle) * Mathf.Rad2Deg) ];
+		}
+
 		public virtual Vector2 getPosition(float angle) {
-			return levelPoints[ Mathf.FloorToInt( RadialMath.normalize(angle)*Mathf.Rad2Deg ) ];
+			int i1 = Mathf.FloorToInt (RadialMath.normalize (angle) * Mathf.Rad2Deg);
+			int i2 = (i1<359) ? (i1 + 1) : 0;
+			return Vector2.Lerp( levelPoints[i1], levelPoints[i2], angle-(float)i1) ;
 		}
 	}
 
