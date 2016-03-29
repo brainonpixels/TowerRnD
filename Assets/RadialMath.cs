@@ -35,6 +35,24 @@ public class RadialMath : MonoBehaviour {
 		return new Vector3 (radius, alpha, y);
 	}
 
+	public static Vector2 euqlidToRadial2(Vector2 euqlid) {
+		float radius = Mathf.Sqrt ( euqlid.x*euqlid.x + euqlid.y*euqlid.y );
+		float y = euqlid.y;
+		float alpha = 0.0f;
+
+		if (euqlid.x >= 0 && euqlid.y < 0)
+			alpha = Mathf.Asin (euqlid.x / radius);
+		else if (euqlid.x >= 0 && euqlid.y >= 0)
+			alpha = Mathf.PI - Mathf.Asin (euqlid.x / radius);
+		else if (euqlid.x < 0 && euqlid.y >= 0)
+			alpha = Mathf.PI + Mathf.Asin (-euqlid.x / radius);
+		else
+			alpha = 2*Mathf.PI - Mathf.Asin (-euqlid.x / radius);
+		
+		
+		return new Vector2 (radius, alpha);
+	}
+
 	public static float normalize(Vector3 radialPos) {
 		float angle = radialPos.y;
 		while (angle > Mathf.PI*2)

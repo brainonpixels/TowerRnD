@@ -164,28 +164,28 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	private void addOneBlock () {
 
-		Transform prefab = chooseNextBlock ();
+		Vector2 p = levelShape.getPosition(nextBlockAngle);
+		Vector3 lastPoint = RadialMath.radialToEuqlid (new Vector3 (p.x, nextBlockAngle, 0.0f));
 
+		Vector2 nextPoint = levelShape.getNextPoint (nextBlockAngle);
+		float distToNext = Mathf.Sqrt ((nextPoint.x - lastPoint.x) * (nextPoint.x - lastPoint.x) + (nextPoint.y - lastPoint.z) * (nextPoint.y - lastPoint.z));
+
+		Transform prefab = chooseNextBlock (distToNext);
 		BoxCollider prefabBox = (BoxCollider)prefab.GetComponent<Collider> ();
 
-		float angle = nextBlockAngle;
-		float angleSize = 0.0f;
-		float radius = 0.0f;
-		float rotation = 0.0f;
-		do {
-			Vector2 pos = levelShape.getPosition(angle);
-			radius = pos.x;
-			rotation = pos.y;
-			angleSize = RadialMath.radialSize (radius, prefabBox.size.x, angle-rotation);
-			angle += 5.0f * Mathf.Deg2Rad;
-		} while ( angle - angleSize / 2.0f < nextBlockAngle );
+		Vector2 startPoint = levelShape.getPositionEuqlid (nextBlockAngle);
+		Vector2 endPoint = levelShape.getPointAtDist (nextBlockAngle, prefabBox.size.x);
+		levelDebugMarker1.position = new Vector3 (endPoint.x, 0.0f, endPoint.y);
 
-		//float radius = getRadius (nextBlockAngle, 0.0f);
-		//float angleSize = RadialMath.radialSize (radius, prefabBox.size.x);
+		float rotation = RadialMath.euqlidToRadial2( endPoint-startPoint ).y - Mathf.PI/2.0f;
+		Vector2 centerPos = Vector2.Lerp (startPoint, endPoint, 0.5f);
+
+		float startAngle = nextBlockAngle;
+		float endAngle = RadialMath.euqlidToRadial2 ( endPoint ).y;
 
 		float height = 0.0f;
-		int startTopsIndex = Mathf.FloorToInt(nextBlockAngle / topsAngle);
-		int endTopsIndex = Mathf.FloorToInt((nextBlockAngle + angleSize) / topsAngle);
+		int startTopsIndex = Mathf.FloorToInt(startAngle / topsAngle);
+		int endTopsIndex = Mathf.FloorToInt(endAngle / topsAngle);
 		int endTopsIndex2 = 0;
 		if (endTopsIndex >= tops.Length) {
 			endTopsIndex2 = endTopsIndex - tops.Length;
@@ -208,21 +208,12 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		for (int i = 0; i < endTopsIndex2; i++)
 			tops [i] = topEdge;
 
-		Vector3 radialPos = new Vector3 (radius, nextBlockAngle + angleSize/2.0f, height);
+		Vector3 radialPos = RadialMath.euqlidToRadial ( new Vector3( centerPos.x, height, centerPos.y ) );
+		//Vector3 radialPos = new Vector3 (radius, nextBlockAngle + angleSize/2.0f, height);
 
 		createBlockInstance (prefab, radialPos, rotation);
 
-		nextBlockAngle += angleSize;
-		nextBlockAngle = RadialMath.normalize (nextBlockAngle);
-
-
-		Vector2 p = levelShape.getPosition(nextBlockAngle);
-		Vector3 lastPoint = RadialMath.radialToEuqlid (new Vector3 (p.x, nextBlockAngle, height));
-		levelDebugMarker1.position = lastPoint;
-
-		Vector2 nextPoint = levelShape.getNextPoint (nextBlockAngle);
-		float distToNext = Mathf.Sqrt ((nextPoint.x - lastPoint.x) * (nextPoint.x - lastPoint.x) + (nextPoint.y - lastPoint.z) * (nextPoint.y - lastPoint.z));
-		Debug.Log ("DIST TO NEXT " + distToNext);
+		nextBlockAngle = endAngle;
 	}
 
 	private void createBlockInstance(Transform prefab, Vector3 radialPos, float rotation) {
@@ -242,8 +233,17 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		}
 	}
 
-	private Transform chooseNextBlock() {		
-		return blockPrefabs[Random.Range(0, blockPrefabs.Length)];
+	private Transform chooseNextBlock(float width) {
+		Transform bestBlock = null;
+		float bestWidth = 1000.0f;
+		foreach (Transform t in blockPrefabs) {
+			float tWidth = ((BoxCollider)t.GetComponent<Collider>()).bounds.size.x;
+			if ( Mathf.Abs(tWidth-width) < bestWidth ) {
+				bestWidth = Mathf.Abs( tWidth-width );
+				bestBlock = t;
+			}
+		}
+		return bestBlock;
 	}
 
 	private void generatePlatforms(int iterMax) {
@@ -416,14 +416,15 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 	private class LevelShape {
 
 		Vector2[] levelPoints; // radius and rotation for each of 360 degrees
-		Vector2[] nextPoint;
+		int[] nextPoint;
+		Vector2[] points;
 
 		public LevelShape() {			
 		}
 
 		public LevelShape(Transform levelPrefab) {
 			
-			ArrayList positions = new ArrayList();
+			//ArrayList positions = new ArrayList();
 			ArrayList radialPositions = new ArrayList();
 			ArrayList radialPositionsTmp = new ArrayList();
 
@@ -439,11 +440,17 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 				radialPositions.Add(minV);
 			}
 
-			foreach (Vector3 pos in radialPositions)
-				positions.Add( RadialMath.radialToEuqlid(pos));
-			
+			//foreach (Vector3 pos in radialPositions)
+			//	positions.Add( RadialMath.radialToEuqlid(pos));
+
+			points = new Vector2[radialPositions.Count];
+			for (int i=0; i<radialPositions.Count; i++) {
+				Vector3 pos = RadialMath.radialToEuqlid( (Vector3)radialPositions[i] );
+				points[i] = new Vector2( pos.x, pos.z );
+			}
+
 			levelPoints = new Vector2[360];
-			nextPoint = new Vector2[360];
+			nextPoint = new int[360];
 
 			int index = radialPositions.Count-1;
 			int index2 = 0;
@@ -463,21 +470,21 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 				Vector3 p1rad = (Vector3)radialPositions[index];
 				Vector3 p2rad = (Vector3)radialPositions[index2];
-				Vector3 p1 = (Vector3)positions[index];
-				Vector3 p2 = (Vector3)positions[index2];
+				Vector2 p1 = points[index];
+				Vector2 p2 = points[index2];
+				nextPoint[i] = index2;
 
 				float rotation = RadialMath.euqlidToRadial( p2-p1 ).y - Mathf.PI/2.0f;
 
 				float N = Mathf.Sin(angle) / Mathf.Cos(angle);
 				float xd = p2.x - p1.x;
-				float yd = p2.z - p1.z;
+				float yd = p2.y - p1.y;
 
-				float y = (xd*p1.z - yd*p1.x) / (xd + N*yd);
+				float y = (xd*p1.y - yd*p1.x) / (xd + N*yd);
 				float x = y * N * -1.0f;
 
 				Vector3 radPos = RadialMath.euqlidToRadial( new Vector3( x, 0.0f, y ));
 				levelPoints[i] = new Vector2(radPos.x, rotation);
-				nextPoint[i] = new Vector2(p2.x, p2.z);
 			}
 		}
 
@@ -486,13 +493,59 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		}
 
 		public Vector2 getNextPoint(float angle) {
-			return nextPoint[ Mathf.FloorToInt (RadialMath.normalize (angle) * Mathf.Rad2Deg) ];
+			return points[ nextPoint[ Mathf.FloorToInt (RadialMath.normalize (angle) * Mathf.Rad2Deg) ] ];
 		}
 
 		public virtual Vector2 getPosition(float angle) {
 			int i1 = Mathf.FloorToInt (RadialMath.normalize (angle) * Mathf.Rad2Deg);
 			int i2 = (i1<359) ? (i1 + 1) : 0;
 			return Vector2.Lerp( levelPoints[i1], levelPoints[i2], angle-(float)i1) ;
+		}
+
+		public Vector2 getPositionEuqlid(float angle) {
+			Vector2 posRad = getPosition (angle);
+			Vector3 pos = RadialMath.radialToEuqlid (new Vector3 ( posRad.x, angle, 0.0f  ));
+			return new Vector2 (pos.x, pos.z);
+		}
+
+		public Vector2 getPointAtDist(float startAngle, float dist) {
+			Vector2 startPos = getPositionEuqlid (startAngle);
+			int index = nextPoint[ Mathf.FloorToInt (RadialMath.normalize (startAngle) * Mathf.Rad2Deg) ];
+			while ( Vector2.Distance(startPos, points[ (index+1)%points.Length ] ) < dist )
+				index++;
+
+			Vector2 p1 = points [index % points.Length];
+			Vector2 p2 = points [(index+1) % points.Length];
+
+			float A = (p1 - startPos).magnitude;
+			//float C = (p2 - p1).magnitude;
+			//float E = (p2 - startPos).magnitude;
+
+			if (A >= dist)
+				return Vector2.Lerp(startPos, p1, dist/A );
+
+
+			// square equasion to solve
+
+			float a = (p2 - p1).sqrMagnitude;
+			float b = 2.0f * (  (p2.x-p1.x)*(p1.x-startPos.x) + (p2.y-p1.y)*(p1.y-startPos.y) );
+			float c = (p1 - startPos).sqrMagnitude - dist * dist;
+			float t1 = (-b - Mathf.Sqrt (b * b - 4.0f * a * c)) / (2.0f * a);
+			float t2 = (-b + Mathf.Sqrt (b * b - 4.0f * a * c)) / (2.0f * a);
+			float t = Mathf.Max (t1, t2);
+			return Vector2.Lerp (p1, p2, t);
+
+//			float cosY = ( A*A + C*C - E*E ) / ( 2.0f * A * C );
+//
+//			float a = 1.0f;
+//			float b = -2.0f * A * cosY;
+//			float c = A * A - dist * dist;
+//
+//			float t1 = (-b - Mathf.Sqrt (b * b - 4.0f * a * c)) / (2.0f * a);
+//			float t2 = (-b + Mathf.Sqrt (b * b - 4.0f * a * c)) / (2.0f * a);
+//			float t = Mathf.Max (t1, t2);
+//
+//			return Vector2.Lerp (p1, p2, t/C);
 		}
 	}
 
