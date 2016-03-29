@@ -164,11 +164,30 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	private void addOneBlock () {
 
-		Vector2 p = levelShape.getPosition(nextBlockAngle);
-		Vector3 lastPoint = RadialMath.radialToEuqlid (new Vector3 (p.x, nextBlockAngle, 0.0f));
+		Vector2 lastPoint = levelShape.getPositionEuqlid(nextBlockAngle);
 
 		Vector2 nextPoint = levelShape.getNextPoint (nextBlockAngle);
-		float distToNext = Mathf.Sqrt ((nextPoint.x - lastPoint.x) * (nextPoint.x - lastPoint.x) + (nextPoint.y - lastPoint.z) * (nextPoint.y - lastPoint.z));
+
+		int startTopsIndex = Mathf.FloorToInt(nextBlockAngle / topsAngle);
+		int endTopsIndex = Mathf.FloorToInt( RadialMath.euqlidToRadial2(nextPoint).y / topsAngle);
+		if (endTopsIndex < startTopsIndex)
+			endTopsIndex += 360;
+
+		float startTops = tops [startTopsIndex];
+		float topsThreshhold = 1.0f;
+
+		for (int i = startTopsIndex+1; i < endTopsIndex; i++) {
+			if (tops[i % tops.Length] > startTops + topsThreshhold) {
+				Debug.Log ("FOUND THRESHHOLD AT "+i);
+				float angle = (i % tops.Length) * topsAngle;
+				nextPoint = levelShape.getPositionEuqlid(angle);
+				break;
+			}
+		}
+
+		float distToNext = Vector2.Distance (nextPoint, lastPoint);
+
+		Debug.Log ("DIST TO NEXT "+distToNext);
 
 		Transform prefab = chooseNextBlock (distToNext);
 		BoxCollider prefabBox = (BoxCollider)prefab.GetComponent<Collider> ();
@@ -184,29 +203,23 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		float endAngle = RadialMath.euqlidToRadial2 ( endPoint ).y;
 
 		float height = 0.0f;
-		int startTopsIndex = Mathf.FloorToInt(startAngle / topsAngle);
-		int endTopsIndex = Mathf.FloorToInt(endAngle / topsAngle);
-		int endTopsIndex2 = 0;
-		if (endTopsIndex >= tops.Length) {
-			endTopsIndex2 = endTopsIndex - tops.Length;
-			endTopsIndex = tops.Length - 1;
+		startTopsIndex = Mathf.FloorToInt(startAngle / topsAngle);
+		endTopsIndex = Mathf.FloorToInt(endAngle / topsAngle);
+
+		if (endTopsIndex < startTopsIndex)
+			endTopsIndex += 360;
+
+		for (int i = startTopsIndex; i < endTopsIndex; i++) {
+			if (tops [i % tops.Length] > height)
+				height = tops [i % tops.Length];
 		}
 
-		for (int i = startTopsIndex; i < endTopsIndex; i++)
-			if (tops [i] > height)
-				height = tops [i];
-		for (int i = 0; i < endTopsIndex2; i++)
-			if (tops [i] > height)
-				height = tops [i];
-
-		height += Random.value * heightDistort;
+		//height += Random.value * heightDistort;
 
 		float topEdge = height + prefabBox.size.y;
 
 		for (int i = startTopsIndex; i < endTopsIndex; i++)
-			tops [i] = topEdge;
-		for (int i = 0; i < endTopsIndex2; i++)
-			tops [i] = topEdge;
+			tops [i % tops.Length] = topEdge;
 
 		Vector3 radialPos = RadialMath.euqlidToRadial ( new Vector3( centerPos.x, height, centerPos.y ) );
 		//Vector3 radialPos = new Vector3 (radius, nextBlockAngle + angleSize/2.0f, height);
