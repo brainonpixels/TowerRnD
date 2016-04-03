@@ -158,7 +158,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 	}
 
 	private void generateNextPart() {
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 150; i++)
 			addOneBlock ();
 	}
 
@@ -551,6 +551,10 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			}
 		}
 	
+		public Vector2[] getPoints() {
+			return points;
+		}
+
 		public override int pointsCount() {
 			return points.Length;
 		}
@@ -567,46 +571,91 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	private class Level {
 
-		LevelShape[] levels;
+		LevelShapeLerp lerp;
+
+		LevelShapeSingle levelA;
+		LevelShapeSingle levelB;
 
 		public Level(Transform[] levelPrefabs) {
-			levels = new LevelShape[ levelPrefabs.Length ];
-			for (int i=0; i<levelPrefabs.Length; i++)
-				levels[i] = new LevelShapeSingle( levelPrefabs[i] );
+			//levels = new LevelShape[ levelPrefabs.Length ];
+			//for (int i=0; i<levelPrefabs.Length; i++)
+			//	levels[i] = new LevelShapeSingle( levelPrefabs[i] );
+
+			levelA = new LevelShapeSingle( levelPrefabs[1] );
+			levelB = new LevelShapeSingle( levelPrefabs[0] );
+
+			lerp = new LevelShapeLerp( levelA, levelB, 10.0f, 20.0f );
+
+		}
+
+		private LevelShape getShapeByHeight(float height) {
+			if (height < 10.0f)
+				return levelA;
+			else if (height < 20.0f)
+				return lerp;
+			else
+				return levelB;
 		}
 
 		public Vector2 getNextPoint(float angle, float height){
-			int index = 0;// (Mathf.FloorToInt (height) / 5) % levels.Length;
-			return levels [index].getNextPoint (angle, height);
+			return getShapeByHeight (height).getNextPoint (angle, height);
 		}
 
 		public virtual Vector2 getPosition(float angle, float height) {
-			int index = 0; //(Mathf.FloorToInt (height) / 5) % levels.Length;
-			return levels [index].getPosition (angle, height);
+			return getShapeByHeight (height).getPosition (angle, height);
 		}
 
 		public Vector2 getPositionEuqlid(float angle, float height) {
-			int index = 0; //(Mathf.FloorToInt (height) / 5) % levels.Length;
-			return levels [index].getPositionEuqlid (angle, height);
+			return getShapeByHeight (height).getPositionEuqlid (angle, height);
 		}
 
 		public Vector2 getPointAtDist(float startAngle, float dist, float height) {
-			int index = 0; //(Mathf.FloorToInt (height) / 5) % levels.Length;
-			return levels [index].getPointAtDist (startAngle, dist, height);
+			return getShapeByHeight (height).getPointAtDist (startAngle, dist, height);
 		}
 
 
 	}
 
-	private class LevelShapeLerp {
+	private class LevelShapeLerp : LevelShape {
 
+		public Vector2[] pointsFrom;
+		public Vector2[] pointsTo;
 
+		public float heightFrom;
+		public float heightTo;
 
-		public LevelShapeLerp(LevelShape from, LevelShape to) {
+		public LevelShapeLerp(LevelShapeSingle from, LevelShapeSingle to, float heightFrom, float heightTo) {
 
+			int pointsCount = Mathf.Max( from.pointsCount(), to.pointsCount() );
 
+			pointsFrom = new Vector2[pointsCount];
+			pointsTo = new Vector2[pointsCount];
+
+			if (from.pointsCount() == to.pointsCount()) {
+			
+				for (int i=0; i<from.pointsCount(); i++) {
+					pointsFrom[i] = from.getPoints()[i];
+					pointsTo[i] = to.getPoints()[i];
+				}
+
+			} else {
+				Debug.Log("LEVEL FROM "+from.pointsCount()+"   LEVEL TO "+to.pointsCount());
+			}
 
 		}
 
+		public override int pointsCount() {
+			return pointsFrom.Length;
+		}
+
+		public override Vector2 getPointRad(int index, float height) {
+			return RadialMath.euqlidToRadial2 ( getPoint (index, height) );
+		}
+
+		public override Vector2 getPoint(int index, float height) {
+			//float t = (height - heightFrom) / (heightTo - heightFrom);
+			//return Vector2.Lerp (pointsFrom [index], pointsTo [index], t);
+			return pointsFrom[index];
+		}
 	}
 }
