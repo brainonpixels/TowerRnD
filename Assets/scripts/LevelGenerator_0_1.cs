@@ -90,18 +90,39 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 		level = new Level (levelPrefabs);
 
-		levelDebugMarker1 = Instantiate (debugMarker);
-		levelDebugMarker1.GetComponent<Renderer> ().material = debugMat1;
+//		levelDebugMarker1 = Instantiate (debugMarker);
+//		levelDebugMarker1.GetComponent<Renderer> ().material = debugMat1;
+//
+//		LevelShapeSingle levelA;
+//		LevelShapeSingle levelB;
+//		
+//		levelA = new LevelShapeSingle( levelPrefabs[1] );
+//		levelB = new LevelShapeSingle( levelPrefabs[0] );
+//
+//		LevelShapeLerp lerp = new LevelShapeLerp( levelA, levelB, 10.0f, 30.0f );
 
-//		for (int i = 0; i < 360; i++) {			
-//			Vector2 pos = levelShape.getPosition ( i );
-//			Transform marker = Instantiate (normalMarker);
-//			marker.position = RadialMath.radialToEuqlid (new Vector3 ( pos.x, Mathf.Deg2Rad*i, 0.0f ));
-//			marker.localEulerAngles = new Vector3 (0.0f, -Mathf.Rad2Deg*pos.y, 0.0f);
+//		for (int i=0; i<8; i++) {
+//			float h = i*5.0f;
+//
+//			LevelShape shape = levelA;
+//			if (h>=10.0f)
+//				shape = lerp;
+//			if (h>=30.0f)
+//				shape = levelB;
+//
+//			for (int j=0; j<shape.pointsCount(); j++) {
+//				Vector2 p = shape.getPoint(j, h);
+//				Transform t = Instantiate(debugMarker);
+//				t.GetComponent<Renderer> ().material = debugMat1;
+//				t.position = new Vector3( p.x, h, p.y );
+//			}
 //		}
 
-		generateNextPart ();
+		level.addOneSection ();
+		level.addOneSection ();
+		generateBlocks ();
 		generatePlatforms (2000);
+
 	}
 
 	void Awake() {
@@ -151,21 +172,25 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 //			}
 //		}
 
+
+
 	}
 
 	private float getRadius(float angle, float height) {
 		return 2.5f + Random.value;
 	}
 
-	private void generateNextPart() {
-		for (int i = 0; i < 150; i++)
-			addOneBlock ();
+	private void generateBlocks() {
+		while (addOneBlock ());
 	}
 
-	private void addOneBlock () {
+	private bool addOneBlock () {
 
 		int startTopsIndex = Mathf.FloorToInt(nextBlockAngle / topsAngle);
 		float startTops = tops [startTopsIndex];
+
+		if (startTops >= level.getTop ())
+			return false;
 
 		Vector2 lastPoint = level.getPositionEuqlid(nextBlockAngle, startTops);
 		Vector2 nextPoint = level.getNextPoint (nextBlockAngle, startTops);
@@ -195,7 +220,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 		Vector2 startPoint = level.getPositionEuqlid (nextBlockAngle, startTops);
 		Vector2 endPoint = level.getPointAtDist (nextBlockAngle, prefabBox.size.x, startTops);
-		levelDebugMarker1.position = new Vector3 (endPoint.x, 0.0f, endPoint.y);
+		//levelDebugMarker1.position = new Vector3 (endPoint.x, 0.0f, endPoint.y);
 
 		float rotation = RadialMath.euqlidToRadial2( endPoint-startPoint ).y - Mathf.PI/2.0f;
 		Vector2 centerPos = Vector2.Lerp (startPoint, endPoint, 0.5f);
@@ -228,6 +253,8 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		createBlockInstance (prefab, radialPos, rotation);
 
 		nextBlockAngle = endAngle;
+
+		return true;
 	}
 
 	private void createBlockInstance(Transform prefab, Vector3 radialPos, float rotation) {
@@ -427,7 +454,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		}
 	}
 
-	private abstract class LevelShape {
+	public abstract class LevelShape {
 		
 		public abstract Vector2 getPointRad(int index, float height);
 		public abstract Vector2 getPoint(int index, float height);
@@ -514,7 +541,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		}
 	}
 		
-	private class LevelShapeSingle : LevelShape {    
+	public class LevelShapeSingle : LevelShape {
 	
 		Vector2[] points;
 		Vector2[] pointsRad;
@@ -569,32 +596,48 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	}
 
-	private class Level {
+	public class Level {
 
 		LevelShapeLerp lerp;
 
 		LevelShapeSingle levelA;
 		LevelShapeSingle levelB;
 
+		private float top = 0.0f;
+
+		private LevelShapeSingle lastShape;
+
+		private ArrayList sections = new ArrayList();
+
+		private int shapeIndex = 0;
+
+		private Transform[] prefabs;
+
 		public Level(Transform[] levelPrefabs) {
 			//levels = new LevelShape[ levelPrefabs.Length ];
 			//for (int i=0; i<levelPrefabs.Length; i++)
 			//	levels[i] = new LevelShapeSingle( levelPrefabs[i] );
 
-			levelA = new LevelShapeSingle( levelPrefabs[1] );
-			levelB = new LevelShapeSingle( levelPrefabs[0] );
+			//levelA = new LevelShapeSingle( levelPrefabs[1] );
+			//levelB = new LevelShapeSingle( levelPrefabs[0] );
+			//lerp = new LevelShapeLerp( levelA, levelB, 10.0f, 20.0f );
+			prefabs = levelPrefabs;
+			lastShape = new LevelShapeSingle( prefabs[shapeIndex++] );
+			sections.Add( new LevelSection( lastShape, 0.0f, 10.0f ));
+			top = 10.0f;
 
-			lerp = new LevelShapeLerp( levelA, levelB, 10.0f, 20.0f );
-
+			addOneSection();
 		}
 
 		private LevelShape getShapeByHeight(float height) {
-			if (height < 10.0f)
-				return levelA;
-			else if (height < 20.0f)
-				return lerp;
-			else
-				return levelB;
+
+			for (int i=sections.Count-1; i>=0; i--) {
+				LevelSection s = (LevelSection)sections[i];
+				if (s.start<=height && s.end>height)
+					return s.shape;
+			}
+
+			return ((LevelSection)sections[sections.Count-1]).shape;
 		}
 
 		public Vector2 getNextPoint(float angle, float height){
@@ -613,10 +656,44 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			return getShapeByHeight (height).getPointAtDist (startAngle, dist, height);
 		}
 
+		public void generateIfNeeded(float playerHeight) {
+			if (playerHeight > top - 30.0f)
+				addOneSection();
+		}
 
+		public void addOneSection() {
+
+			LevelShapeSingle newShape = new LevelShapeSingle (prefabs[ (shapeIndex++)%prefabs.Length ] );
+
+			float start = top;
+			float middle = start + 10.0f;
+			float end = middle + 10.0f;
+
+			sections.Add (new LevelSection ( new LevelShapeLerp( lastShape, newShape, start, middle ), start, middle ));
+			sections.Add (new LevelSection (newShape, middle, end));
+
+			top = end;
+			lastShape = newShape;
+		}
+
+		public float getTop() {
+			return top;
+		}
 	}
 
-	private class LevelShapeLerp : LevelShape {
+	public class LevelSection {
+		public LevelShape shape;
+		public float start;
+		public float end;
+
+		public LevelSection(LevelShape shape, float start,float end) {
+					this.shape =shape;
+					this.start = start;
+					this.end = end;
+		}
+	}
+
+	public class LevelShapeLerp : LevelShape {
 
 		public Vector2[] pointsFrom;
 		public Vector2[] pointsTo;
@@ -628,6 +705,9 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 			int pointsCount = Mathf.Max( from.pointsCount(), to.pointsCount() );
 
+			this.heightFrom = heightFrom;
+			this.heightTo = heightTo;
+
 			pointsFrom = new Vector2[pointsCount];
 			pointsTo = new Vector2[pointsCount];
 
@@ -638,8 +718,44 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 					pointsTo[i] = to.getPoints()[i];
 				}
 
-			} else {
-				Debug.Log("LEVEL FROM "+from.pointsCount()+"   LEVEL TO "+to.pointsCount());
+			} else if (from.pointsCount() > to.pointsCount()) {
+
+				for (int i=0; i<from.pointsCount(); i++)
+					pointsFrom[i] = from.getPoints()[i];
+
+				for (int i=0; i<from.pointsCount(); i++) {
+
+					Vector2 closest = new Vector2(0.0f, 0.0f);
+					float minDist = 10000.0f;
+					for (int j=0; j<to.pointsCount(); j++) {
+						float dist = Vector2.Distance( to.getPoints()[j], pointsFrom[i]);
+						if (dist < minDist) {
+							minDist = dist;
+							closest = to.getPoints()[j];
+						}
+					}
+
+					pointsTo[i] = closest;
+				}
+			} else if (from.pointsCount() < to.pointsCount()) {
+				
+				for (int i=0; i<to.pointsCount(); i++)
+					pointsTo[i] = to.getPoints()[i];
+				
+				for (int i=0; i<to.pointsCount(); i++) {
+					
+					Vector2 closest = new Vector2(0.0f, 0.0f);
+					float minDist = 10000.0f;
+					for (int j=0; j<from.pointsCount(); j++) {
+						float dist = Vector2.Distance( from.getPoints()[j], pointsTo[i]);
+						if (dist < minDist) {
+							minDist = dist;
+							closest = from.getPoints()[j];
+						}
+					}
+					
+					pointsFrom[i] = closest;
+				}
 			}
 
 		}
@@ -653,9 +769,8 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		}
 
 		public override Vector2 getPoint(int index, float height) {
-			//float t = (height - heightFrom) / (heightTo - heightFrom);
-			//return Vector2.Lerp (pointsFrom [index], pointsTo [index], t);
-			return pointsFrom[index];
+			float t = (height - heightFrom) / (heightTo - heightFrom);
+			return Vector2.Lerp (pointsFrom [index], pointsTo [index], t);
 		}
 	}
 }
