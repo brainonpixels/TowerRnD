@@ -123,6 +123,10 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		generateBlocks ();
 		generatePlatforms (2000);
 
+
+		level.generateIfNeeded (200.0f);
+		generateBlocks ();
+		generatePlatforms (2000);
 	}
 
 	void Awake() {
@@ -133,6 +137,13 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.G)) {
 			addOneBlock ();
 		}
+
+		float playerHeight = player.position.y;
+		if (level.generateIfNeeded (playerHeight)) {
+			generateBlocks ();
+			generatePlatforms (2000);
+		}
+
 	}
 
 	void FixedUpdate() {
@@ -308,6 +319,9 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 				if (p.position.y < platform.position.y)
 					platform = p;
 			}
+
+			if (platform.position.y > level.getTop() - 10.0f)
+				return;
 
 			foreach (PlatformHandle h in handles)
 				if ((h.position-platform.position).magnitude<0.1f)
@@ -656,9 +670,12 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			return getShapeByHeight (height).getPointAtDist (startAngle, dist, height);
 		}
 
-		public void generateIfNeeded(float playerHeight) {
-			if (playerHeight > top - 30.0f)
-				addOneSection();
+		public bool generateIfNeeded(float playerHeight) {
+			if (playerHeight > top - 30.0f) {
+				addOneSection ();
+				return true;
+			}
+			return false;
 		}
 
 		public void addOneSection() {
