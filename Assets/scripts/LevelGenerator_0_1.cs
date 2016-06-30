@@ -40,6 +40,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 	private int jumpTopPathIndex = 0;
 	private float jumpHeight = 0.0f;
 	private Vector3[] jumpPath;
+	private Vector3 spawnLocation;
 
 	public float maxVerticalDist = 2.9f;
 	public float maxHorizontalDist = 1.0f;
@@ -50,7 +51,9 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	private Transform levelDebugMarker1;
 
-	void Start () {
+	private float lastUpdateHeight = 0.0f;
+
+	void Awake () {
 
 		RadialPlayerControl pc = player.GetComponent<RadialPlayerControl> ();
 		PlatformHandle.debugMaterial = debugMat1;
@@ -88,48 +91,26 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			topPlatforms.Add (t);
 		}
 
-		level = new Level (levelPrefabs);
 
-//		levelDebugMarker1 = Instantiate (debugMarker);
-//		levelDebugMarker1.GetComponent<Renderer> ().material = debugMat1;
-//
-//		LevelShapeSingle levelA;
-//		LevelShapeSingle levelB;
-//		
-//		levelA = new LevelShapeSingle( levelPrefabs[1] );
-//		levelB = new LevelShapeSingle( levelPrefabs[0] );
-//
-//		LevelShapeLerp lerp = new LevelShapeLerp( levelA, levelB, 10.0f, 30.0f );
-
-//		for (int i=0; i<8; i++) {
-//			float h = i*5.0f;
-//
-//			LevelShape shape = levelA;
-//			if (h>=10.0f)
-//				shape = lerp;
-//			if (h>=30.0f)
-//				shape = levelB;
-//
-//			for (int j=0; j<shape.pointsCount(); j++) {
-//				Vector2 p = shape.getPoint(j, h);
-//				Transform t = Instantiate(debugMarker);
-//				t.GetComponent<Renderer> ().material = debugMat1;
-//				t.position = new Vector3( p.x, h, p.y );
-//			}
-//		}
-
-		level.addOneSection ();
-		level.addOneSection ();
-		generateBlocks ();
-		generatePlatforms (2000);
-
-
-		level.generateIfNeeded (200.0f);
-		generateBlocks ();
-		generatePlatforms (2000);
 	}
 
-	void Awake() {
+	public void startLevel() {
+
+		level = new Level (levelPrefabs);
+
+		level.addOneSection ();
+		level.addOneSection ();
+		generateBlocks ();
+		generatePlatforms (2000);
+
+		level.generateIfNeeded (200.0f);
+
+		addOneBlock ();
+		createPlatform (handles [0] as PlatformHandle);
+		spawnLocation = platforms.GetChild (0).position;
+
+		generateBlocks ();
+		generatePlatforms (2000);
 	}
 
 	// Update is called once per frame
@@ -148,43 +129,21 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 	void FixedUpdate() {
 
-//		if ( Input.GetMouseButtonDown(0))
-//		{
-//			int layerMask = 1 << 9;
-//			RaycastHit hit;
-//			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-//
-//			if (Physics.Raycast (ray, out hit, 1000.0f, layerMask)) {
-//
-//				foreach (PlatformHandle h in handles) {
-//					h.transform.GetComponent<Renderer> ().material = defaultHandleMaterial;
-//				}
-//
-//				hit.transform.GetComponent<Renderer> ().material = selectedHandleMaterial;
-//
-//				Vector3 radialPos = RadialMath.euqlidToRadial (hit.transform.position);
-//
-//				for (int i = 0; i < jumpPath.Length; i++) {
-//					Vector3 pos = RadialMath.radialToEuqlid ( radialPos + jumpPath[i] );
-//					Transform x = Instantiate (debugMarker);
-//					x.position = pos;
-//					x.localScale = new Vector3 (0.2f, 0.2f, 0.2f);
-//				}
-//
-//				foreach (PlatformHandle h in handles) {
-//					if (h.transform != hit.transform) {
-//						if (canJump (RadialMath.euqlidToRadial (hit.transform.position), RadialMath.euqlidToRadial (h.transform.position)))
-//							h.transform.GetComponent<Renderer> ().material = debugMat1;
-//						else
-//							h.transform.GetComponent<Renderer> ().material = defaultHandleMaterial;
-//					}
-//
-//				}
-//			}
-//		}
+		float playerH = player.transform.position.y;
+		if (playerH - lastUpdateHeight > 10.0f) {
+			lastUpdateHeight = playerH;
+			recycle();
+		}
 
+	}
 
+	private void recycle() {
+		float playerH = player.transform.position.y;
 
+		foreach (Transform platform in platforms) {
+			if (platform.position.y < playerH - 6.0f)
+				Destroy(platform.gameObject);
+		}
 	}
 
 	private float getRadius(float angle, float height) {
@@ -310,8 +269,6 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		int iter = 0;
 		while (topPlatforms.Count > 0 && iter<iterMax) {
 
-
-
 			Transform platform = topPlatforms [0] as Transform;
 
 			for (int i = 1; i < topPlatforms.Count; i++) {
@@ -331,7 +288,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			handlesInRange.Sort (handleComparer);
 
 			int added = 0;
-			while (added < 5000 && handlesInRange.Count > 0) {
+			while (addAnotherOne(added) && handlesInRange.Count > 0) {
 
 				PlatformHandle h = handlesInRange [0] as PlatformHandle;
 				//PlatformHandle h = handlesInRange [Random.Range(0,handlesInRange.Count-1)] as PlatformHandle;
@@ -355,6 +312,16 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			topPlatforms.Remove(platform);
 			iter++;
 		}
+	}
+
+	private bool addAnotherOne(int alreadyAdded) {
+		if (alreadyAdded == 0)
+			return true;
+		if (alreadyAdded == 1)
+			return Random.value > 0.5f;
+		if (alreadyAdded == 2)
+			return Random.value > 0.8f;
+		return false;
 	}
 
 	private void createPlatform(PlatformHandle handle) {
@@ -419,6 +386,10 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 				return RelativePos.TOO_CLOSE;
 
 		return RelativePos.JUST_RIGHT;
+	}
+
+	public Vector3 getSpawningLocation() {
+		return spawnLocation;
 	}
 
 	private class PlatformHandle {

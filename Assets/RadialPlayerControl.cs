@@ -14,7 +14,8 @@ public class RadialPlayerControl : MonoBehaviour {
 	public float acceleration = 10.0f;
 	public float maxSpeed = 1.0f;
 	public float jumpSpeed = 10.0f;
-	public float cameraSmoothing = 5.0f;
+	public float cameraSmoothingHorizontal = 5.0f;
+	public float cameraSmoothingVertical = 5.0f;
 	public float cameraHeight = 3.0f;
 	public float gravity = -9.89f;
 
@@ -31,6 +32,7 @@ public class RadialPlayerControl : MonoBehaviour {
 	Vector3 cameraPosition;
 	Vector3 cameraOffset;
 	float cameraTilt;
+	Vector3 spawnPosition;
 
 	float currentPlatformPosY = 0.0f;
 	float speedY = 0.0f;
@@ -65,28 +67,30 @@ public class RadialPlayerControl : MonoBehaviour {
 			maxJumpHeight += vs * dt;
 			vs = vs + gravity * dt;
 		}
-	}
 
-	void Start () {
 		radialPos = RadialMath.euqlidToRadial (transform.position);
 		radialCameraPos = RadialMath.euqlidToRadial (cam.transform.position);
 		radialCameraPos.y = radialPos.y;
-
+		
 		cameraOffset = cam.transform.position - transform.position;
 		cameraTilt = cam.transform.localEulerAngles.x;
-
+		
 		debugMarker1 = Instantiate (debugMarker);
 		debugMarker1.GetComponent<Renderer> ().material = debugMat1;
-
+		
 		debugMarker2 = Instantiate (debugMarker);
 		debugMarker2.GetComponent<Renderer> ().material = debugMat2;
-
+		
 		debugMarker3 = Instantiate (debugMarker);
 		debugMarker3.GetComponent<Renderer> ().material = debugMat3;
-
+		
 		debugMarker4 = Instantiate (debugMarker);
 		debugMarker4.GetComponent<Renderer> ().material = debugMat3;
 		debugMarker4.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
+	}
+
+	void Start () {
+
 	}
 
 	void Update() {
@@ -127,8 +131,8 @@ public class RadialPlayerControl : MonoBehaviour {
 		transform.position = RadialMath.radialToEuqlid (radialPos);
 		transform.localEulerAngles = new Vector3 (0.0f, direction * Mathf.Rad2Deg, 0.0f);
 
-		radialCameraPos.z = Mathf.Lerp (radialCameraPos.z, currentPlatformPosY + cameraOffset.y, cameraSmoothing * Time.deltaTime * dt);		
-		radialCameraPos.y = RadialMath.Lerp (radialCameraPos.y, radialPos.y, cameraSmoothing * Time.deltaTime * dt);
+		radialCameraPos.z = Mathf.Lerp (radialCameraPos.z, currentPlatformPosY + cameraOffset.y, cameraSmoothingVertical * Time.deltaTime * dt);		
+		radialCameraPos.y = RadialMath.Lerp (radialCameraPos.y, radialPos.y, cameraSmoothingHorizontal * Time.deltaTime * dt);
 
 		cam.transform.position = RadialMath.radialToEuqlid (radialCameraPos);
 		cam.transform.localEulerAngles = new Vector3 (cameraTilt, -radialCameraPos.y * Mathf.Rad2Deg, 0.0f);
@@ -200,6 +204,9 @@ public class RadialPlayerControl : MonoBehaviour {
 
 		}
 
+		if (transform.position.y < currentPlatformPosY - 3.0f)
+			GameControl.get ().gameOver ();
+
 //		if (nextPlatform != null)
 //			debugMarker1.transform.position = nextPlatform.getTransform ().position;
 //		else 
@@ -224,7 +231,8 @@ public class RadialPlayerControl : MonoBehaviour {
 			onGround = true;
 			radialPos.z = transform.position.y + (other.bounds.max.y - playerCollider.bounds.min.y - 0.1f);
 			transform.position = RadialMath.radialToEuqlid (radialPos);
-			currentPlatformPosY = other.transform.position.y;
+			if (other.transform.position.y>currentPlatformPosY)
+				currentPlatformPosY = other.transform.position.y;
 			lastPlatform = other.GetComponent<Platform> ();
 			overPlatform = null;
 			animator.SetBool ("onGround", true);
@@ -288,5 +296,19 @@ public class RadialPlayerControl : MonoBehaviour {
 			logTime = 0;
 			Debug.Log (message);
 		}
+	}
+
+	public void setSpawnPosition(Vector3 position) {
+		spawnPosition = position;
+	}
+
+	public void respawn() {
+		Vector3 playerPos = new Vector3 (spawnPosition.x, spawnPosition.y + 2.0f, spawnPosition.z);
+		radialPos = RadialMath.euqlidToRadial (playerPos);
+		transform.position = playerPos;
+		currentPlatformPosY = spawnPosition.y;
+		speedY = 0.0f;
+		vertSpeed = 0.0f;
+		onGround = false;
 	}
 }
