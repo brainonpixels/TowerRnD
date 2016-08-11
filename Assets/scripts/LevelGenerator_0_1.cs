@@ -235,6 +235,10 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 		foreach (Transform t in instance) {
 			if (t.tag == "platform_mount") {
+
+				// disable displaying platform handles
+				t.GetComponent<Renderer>().enabled = false;
+
 				PlatformHandle handle = new PlatformHandle ();
 				handle.transform = t;
 				handle.position = t.position;
@@ -244,17 +248,23 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		}
 	}
 
+	private ArrayList matchingBlocks = new ArrayList();
+
 	private Transform chooseNextBlock(float width) {
 		Transform bestBlock = null;
 		float bestWidth = 1000.0f;
 		foreach (Transform t in blockPrefabs) {
-			float tWidth = ((BoxCollider)t.GetComponent<Collider>()).bounds.size.x;
-			if ( Mathf.Abs(tWidth-width) < bestWidth ) {
-				bestWidth = Mathf.Abs( tWidth-width );
-				bestBlock = t;
-			}
+			float tWidth = ((BoxCollider)t.GetComponent<Collider>()).size.x;
+			//if ( Mathf.Abs(tWidth-width) < bestWidth ) {
+			//	bestWidth = Mathf.Abs( tWidth-width );
+			//	bestBlock = t;
+			//}
+			if (tWidth<width)
+				matchingBlocks.Add (t);
 		}
-		return bestBlock;
+
+
+		return matchingBlocks [Random.Range ( 0, matchingBlocks.Count -1  )] as Transform;
 	}
 
 	private void generatePlatforms(int iterMax) {
@@ -280,9 +290,9 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 			if (platform.position.y > level.getTop() - 10.0f)
 				return;
 
-			foreach (PlatformHandle h in handles)
-				if ((h.position-platform.position).magnitude<0.1f)
-					h.transform.GetComponent<Renderer> ().material = debugMat1;
+			//foreach (PlatformHandle h in handles)
+			//	if ((h.position-platform.position).magnitude<0.1f)
+			//		h.transform.GetComponent<Renderer> ().material = debugMat1;
 
 			getHandlesInRange (platform, handlesInRange, handlesList);
 			handlesInRange.Sort (handleComparer);
@@ -299,7 +309,7 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 
 				createPlatform (h);
 				added++;
-				h.transform.GetComponent<Renderer> ().material = debugMat2;
+				//h.transform.GetComponent<Renderer> ().material = debugMat2;
 
 				foreach (PlatformHandle otherH in handlesList) {
 					if (getRelativePosition (h.radialPosition, otherH.radialPosition) == RelativePos.TOO_CLOSE) {
@@ -405,8 +415,8 @@ public class LevelGenerator_0_1 : MonoBehaviour {
 		public bool enabled  {
 			set { 
 				en = value;
-				if (!en)
-					transform.GetComponent<Renderer> ().material = debugMaterial;
+				//if (!en)
+				//	transform.GetComponent<Renderer> ().material = debugMaterial;
 			}
 			get { return en; }
 		}

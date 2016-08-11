@@ -165,4 +165,9 @@ public class RadialMath : MonoBehaviour {
 			Mathf.Asin (width / 2.0f * Mathf.Sin (Mathf.PI / 2.0f - angle) / A) +
 			Mathf.Asin (width / 2.0f * Mathf.Sin (Mathf.PI / 2.0f + angle) / B);
 	}
+
+	public static bool overlap(float a1, float a2, float b1, float b2) {
+		//Debug.Log ("CHECK OVERLAP " + a1 + " " + a2 + " " + b1 + " " + b2);
+		return onRight (b1, a2) && onLeft (b2, a1);
+	}
 }

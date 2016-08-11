@@ -145,11 +145,19 @@ public class RadialPlayerControl : MonoBehaviour {
 
 		Platform newNextPlatform = nextPlatform;
 		if (lastPlatform != null) {
-			if (angleChange > 0.0f && radialPos.y > lastPlatform.getEndAngle ())
-				newNextPlatform = findNextPlatform (angleChange);
-			else if (angleChange < 0.0f && radialPos.y < lastPlatform.getStartAngle ())
-				newNextPlatform = findNextPlatform (angleChange);
+			//if (angleChange > 0.0f && radialPos.y > lastPlatform.getEndAngle ())
+			//	newNextPlatform = findNextPlatform (angleChange);
+			//else if (angleChange < 0.0f && radialPos.y < lastPlatform.getStartAngle ())
+			//	newNextPlatform = findNextPlatform (angleChange);
+
+			newNextPlatform = findNextPlatform (angleChange, speedY);
 		}
+
+		if (newNextPlatform != null)
+			debugMarker1.transform.position = newNextPlatform.getTransform ().position;
+		else 
+			debugMarker1.transform.position = new Vector3 (0.0f, 0.0f, 0.0f);
+
 
 		if (nextPlatform != null && RadialMath.angleInRange (radialPos.y, nextPlatform.getStartAngle (), nextPlatform.getEndAngle ()) && radialPos.z > nextPlatform.transform.position.y)
 			overPlatform = nextPlatform;
@@ -167,13 +175,27 @@ public class RadialPlayerControl : MonoBehaviour {
 				radialPos.x = RadialMath.radius (pos);
 				direction = lastPlatform.transform.localEulerAngles.y * Mathf.Deg2Rad;
 			} else if (nextPlatform != null) {
-				
+
+				// check if platforms overlap - in this case lerp radial pos between centers
+				if (RadialMath.overlap(lastPlatform.getStartAngle(), lastPlatform.getEndAngle(), nextPlatform.getStartAngle(), nextPlatform.getEndAngle())) {
+					//Debug.Log("NEXT PLATFORM OVERLAPS WITH LAST");
+					float t = (radialPos.z - lastPlatform.getRadialPosition().z) / (nextPlatform.getRadialPosition().z - lastPlatform.getRadialPosition().z);
+					radialPos.x = Mathf.Lerp(
+						RadialMath.radius (lastPlatform.getPosOnPlatform(radialPos.y)), 
+						RadialMath.radius (nextPlatform.getPosOnPlatform(radialPos.y)),
+						t);
+				} else
+
+				// check if player stands on last platform - in this case put player on axis of platform
 				if (RadialMath.angleInRange (radialPos.y, lastPlatform.getStartAngle (), lastPlatform.getEndAngle ())) {
 					Vector3 pos = lastPlatform.getPosOnPlatform (radialPos.y);
 					radialPos.x = RadialMath.radius (pos);
 					direction = lastPlatform.transform.localEulerAngles.y * Mathf.Deg2Rad;
 				} else {
-					
+
+					// if not over last platform, check if next or over platform and in this case put player on axis of proper platform
+					// if not over any platform lerp position between end of last platform and start of next platform
+
 					Vector3 lastNearest = lastPlatform.getNearestEndRadial (radialPos.y);
 					Vector3 nextNearest = nextPlatform.getNearestEndRadial (radialPos.y);
 					Vector3 overNearest = Vector3.zero;
@@ -204,13 +226,10 @@ public class RadialPlayerControl : MonoBehaviour {
 
 		}
 
-		if (transform.position.y < currentPlatformPosY - 3.0f)
-			GameControl.get ().gameOver ();
+		//if (transform.position.y < currentPlatformPosY - 3.0f)
+		//	GameControl.get ().gameOver ();
 
-//		if (nextPlatform != null)
-//			debugMarker1.transform.position = nextPlatform.getTransform ().position;
-//		else 
-//			debugMarker1.transform.position = new Vector3 (0.0f, 0.0f, 0.0f);
+
 //
 //		if (lastPlatform != null)
 //			debugMarker2.transform.position = lastPlatform.getTransform ().position;
@@ -225,9 +244,12 @@ public class RadialPlayerControl : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		
+
+		Debug.Log ("ENTER PLATFORM "+onGround);
+
+
 		if (other.tag=="platform" && other.bounds.max.y < playerCollider.bounds.min.y + 0.4f) {
-			Debug.Log ("HIT PLATFORM "+transform.position.y);
+			//Debug.Log ("HIT PLATFORM "+transform.position.y);
 			onGround = true;
 			radialPos.z = transform.position.y + (other.bounds.max.y - playerCollider.bounds.min.y - 0.1f);
 			transform.position = RadialMath.radialToEuqlid (radialPos);
@@ -241,28 +263,35 @@ public class RadialPlayerControl : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		if (other.tag == "platform") {
-			Debug.Log ("EXIT PLATFORM "+transform.position.y);
+			Debug.Log ("EXIT PLATFORM ");
 			onGround = false;
 		}
 	}
 
-	private Platform findNextPlatform(float angleChange) {
+	private Platform findNextPlatform(float angleChange, float heightChange) {
 
 		RadialMath.normalize (radialPos);
 
-		if (angleChange == 0.0f)
-			return null;
-
 		float angleMin = 0.0f;
 		float angleMax = 0.0f;
+		float zMin = radialPos.z - 100.0f;
+		float zMax = radialPos.z + 100.0f;
 
 		if (angleChange > 0.0f) {
-			angleMin = radialPos.y;
+			angleMin = radialPos.y - 0.1f;
 			angleMax = radialPos.y + Mathf.PI / 1.5f;
-		} else {
+		} else if (angleChange < 0.0f) {
 			angleMin = radialPos.y - Mathf.PI / 1.5f;
-			angleMax = radialPos.y;
+			angleMax = radialPos.y + 0.1f;
+		} else {
+			angleMin = radialPos.y - 0.1f;
+			angleMax = radialPos.y + 0.1f;
 		}
+
+		if (heightChange > 0.0f)
+			zMin = radialPos.z;
+		if (heightChange < 0.0f)
+			zMax = radialPos.z;
 
 		Platform minT = null;
 		float minDist = 10000000.0f;
@@ -278,8 +307,7 @@ public class RadialPlayerControl : MonoBehaviour {
 				Vector3 radial = p.getRadialPosition ();
 
 				if ( RadialMath.angleInRange(radial.y, angleMin, angleMax) ) {
-				float dist = (pos - transform.position).magnitude;
-
+					float dist = (pos - transform.position).magnitude;
 					if (dist < minDist) {
 						minDist = dist;
 						minT = p;
@@ -287,6 +315,50 @@ public class RadialPlayerControl : MonoBehaviour {
 				}
 			}
 
+		return minT;
+	}
+
+	private Platform findNextPlatformOld(float angleChange) {
+		
+		RadialMath.normalize (radialPos);
+		
+		if (angleChange == 0.0f)
+			return null;
+		
+		float angleMin = 0.0f;
+		float angleMax = 0.0f;
+		
+		if (angleChange > 0.0f) {
+			angleMin = radialPos.y;
+			angleMax = radialPos.y + Mathf.PI / 1.5f;
+		} else {
+			angleMin = radialPos.y - Mathf.PI / 1.5f;
+			angleMax = radialPos.y;
+		}
+		
+		Platform minT = null;
+		float minDist = 10000000.0f;
+		
+		foreach (Transform t in platforms) {
+			
+			Platform p = t.GetComponent<Platform>();
+			
+			if (p == null)
+				continue;
+			
+			Vector3 pos = t.position;
+			Vector3 radial = p.getRadialPosition ();
+			
+			if ( RadialMath.angleInRange(radial.y, angleMin, angleMax) ) {
+				float dist = (pos - transform.position).magnitude;
+				
+				if (dist < minDist) {
+					minDist = dist;
+					minT = p;
+				}
+			}
+		}
+		
 		return minT;
 	}
 
